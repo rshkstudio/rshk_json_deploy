@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotebookLM Knowledge Parser</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Merriweather:ital,wght@1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .font-serif {
+            font-family: 'Merriweather', serif;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* 自定義捲軸 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* 閃卡動畫效果 */
+        .flashcard-answer {
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .flashcard-answer.show {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px dashed #e9d5ff;
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 p-6 md:p-12">
+
+    <div class="max-w-5xl mx-auto">
+
+        <header class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-900 tracking-tight">
+                    <i class="fa-solid fa-book-open-reader text-indigo-600 mr-2"></i>Knowledge Garden
+                </h1>
+                <p class="text-slate-500 text-sm mt-1">NotebookLM JSON Parser V3.0</p>
+            </div>
+            <button onclick="clearAll()" class="text-sm text-slate-400 hover:text-red-500 transition">
+                Clear Data
+            </button>
+        </header>
+
+        <div id="inputSection" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-10 transition-all">
+            <label class="block text-sm font-medium text-slate-700 mb-2">Paste JSON Output here:</label>
+            <textarea id="jsonInput"
+                class="w-full h-40 p-4 font-mono text-sm bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                placeholder='{ "source_metadata": { ... } }'></textarea>
+
+            <div class="mt-4 flex items-center justify-between">
+                <div id="errorMessage" class="text-red-500 text-sm hidden">
+                    <i class="fa-solid fa-circle-exclamation mr-1"></i> Invalid JSON format.
+                </div>
+                <button onclick="parseJSON()"
+                    class="ml-auto bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg shadow-sm transition-all transform active:scale-95 flex items-center">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Render
+                </button>
+            </div>
+        </div>
+
+        <div id="outputContainer" class="hidden space-y-12">
+
+            <div id="metaContainer"
+                class="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-8 border border-slate-200 shadow-sm relative overflow-hidden">
+            </div>
+
+            <div id="sectionsContainer" class="space-y-8">
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // 取得 DOM 元素
+        const inputSection = document.getElementById('inputSection');
+        const outputContainer = document.getElementById('outputContainer');
+        const jsonInput = document.getElementById('jsonInput');
+        const errorMsg = document.getElementById('errorMessage');
+
+        function clearAll() {
+            jsonInput.value = '';
+            outputContainer.classList.add('hidden');
+            inputSection.classList.remove('hidden');
+        }
+
+        function parseJSON() {
+            const raw = jsonInput.value.trim();
+            if (!raw) return;
+
+            try {
+                // 嘗試解析 JSON
+                // 移除 markdown code blocks 標記 (如果有的話)
+                const cleanJson = raw.replace(/^```json/, '').replace(/```$/, '');
+                const data = JSON.parse(cleanJson);
+
+                // 隱藏錯誤訊息，開始渲染
+                errorMsg.classList.add('hidden');
+                renderData(data);
+
+                // UX: 隱藏輸入框，顯示結果 (可選)
+                // inputSection.classList.add('hidden'); 
+                outputContainer.classList.remove('hidden');
+
+            } catch (e) {
+                console.error(e);
+                errorMsg.textContent = `Error: ${e.message}`;
+                errorMsg.classList.remove('hidden');
+            }
+        }
+
+        function renderData(data) {
+            // 1. Render Metadata
+            const meta = data.source_metadata || {};
+            const summary = data.high_level_summary || "No summary provided.";
+
+            document.getElementById('metaContainer').innerHTML = `
+                <div class="absolute top-0 right-0 p-4 opacity-5">
+                    <i class="fa-solid fa-quote-right text-9xl"></i>
+                </div>
+                <div class="relative z-10">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <h2 class="text-3xl font-bold text-slate-900">${meta.title || 'Untitled'}</h2>
+                            <div class="flex items-center gap-3 mt-2 text-slate-500 text-sm font-mono">
+                                <span><i class="fa-regular fa-user mr-1"></i> ${meta.main_author || 'Unknown'}</span>
+                                <span>|</span>
+                                <span><i class="fa-regular fa-calendar mr-1"></i> ${meta.date_processed || '-'}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-indigo-50/50 p-6 rounded-xl border border-indigo-100">
+                        <h3 class="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2">Executive Summary</h3>
+                        <p class="text-slate-700 leading-relaxed text-lg">${summary}</p>
+                    </div>
+                </div>
+            `;
+
+            // 2. Render Sections
+            const container = document.getElementById('sectionsContainer');
+            container.innerHTML = ''; // 清空
+
+            if (data.sections && data.sections.length > 0) {
+                data.sections.forEach(section => {
+                    container.innerHTML += createSectionHTML(section);
+                });
+            }
+        }
+
+        function createSectionHTML(section) {
+            // 處理 Tags
+            const tagsHTML = (section.tags || []).map(tag =>
+                `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                    ${tag}
+                </span>`
+            ).join(' ');
+
+            // 處理 Insights (TodoList)
+            const insightsHTML = (section.actionable_insights || []).map(insight => {
+                // 根據 Effort Score 給予不同顏色標記
+                let effortBadge = '';
+                if (insight.effort_score) {
+                    const colors = {
+                        1: 'bg-green-100 text-green-700',
+                        2: 'bg-green-50 text-green-600',
+                        3: 'bg-yellow-50 text-yellow-600',
+                        4: 'bg-orange-50 text-orange-600',
+                        5: 'bg-red-50 text-red-600'
+                    };
+                    effortBadge = `<span class="${colors[insight.effort_score] || 'bg-gray-100'} text-[10px] px-1.5 py-0.5 rounded ml-2 font-mono">Effort: ${insight.effort_score}</span>`;
+                }
+
+                return `
+                <li class="flex items-start gap-3 pb-3 border-b border-slate-50 last:border-0 last:pb-0">
+                    <div class="mt-1 text-indigo-500"><i class="fa-regular fa-square-check"></i></div>
+                    <div class="text-sm text-slate-700">
+                        <span class="font-medium text-slate-900">[${insight.type || 'Action'}]</span> 
+                        ${insight.content}
+                        ${effortBadge}
+                    </div>
+                </li>`;
+            }).join('');
+
+            // 處理 Quotes
+            const quotesHTML = (section.quotes || []).map(q => `
+                <div class="relative pl-4 border-l-2 border-amber-300 mb-4">
+                    <p class="text-slate-800 font-serif italic mb-1">"${q.text}"</p>
+                    <p class="text-xs text-slate-400">— ${q.speaker || 'Unknown'} <span class="opacity-50">(${q.context || ''})</span></p>
+                </div>
+            `).join('');
+
+            // 處理 Flashcard (隱藏式)
+            let flashcardHTML = '';
+            if (section.flashcard && section.flashcard.question) {
+                flashcardHTML = `
+                <div onclick="this.querySelector('.flashcard-answer').classList.toggle('show')" 
+                     class="group cursor-pointer bg-fuchsia-50 border border-fuchsia-100 rounded-lg p-4 hover:shadow-md hover:border-fuchsia-200 transition-all select-none">
+                    <div class="flex items-center gap-2 text-fuchsia-800 font-medium">
+                        <i class="fa-solid fa-brain"></i>
+                        <span>${section.flashcard.question}</span>
+                        <i class="fa-solid fa-chevron-down text-xs ml-auto opacity-50 group-hover:opacity-100 transition"></i>
+                    </div>
+                    <div class="flashcard-answer text-fuchsia-900 text-sm">
+                        ${section.flashcard.answer}
+                    </div>
+                </div>`;
+            }
+
+            // 處理 Project Idea (Vibe Coding Block)
+            let projectHTML = '';
+            if (section.project_ideas && section.project_ideas.title) {
+                const stack = (section.project_ideas.tech_stack || []).map(t => `<span class="text-slate-400 border-b border-slate-600">${t}</span>`).join(', ');
+
+                projectHTML = `
+                <div class="bg-slate-900 rounded-xl p-5 text-slate-300 font-mono text-sm relative overflow-hidden group border border-slate-800 shadow-xl">
+                    <div class="absolute top-0 right-0 p-3 opacity-20 text-4xl group-hover:rotate-12 transition transform">
+                        <i class="fa-solid fa-terminal"></i>
+                    </div>
+                    <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-3">
+                        <i class="fa-solid fa-code mr-1"></i> Vibe Coding Idea
+                    </h4>
+                    <h3 class="text-white font-bold text-lg mb-2 font-sans">${section.project_ideas.title}</h3>
+                    <p class="mb-4 text-slate-400 leading-relaxed">${section.project_ideas.description}</p>
+                    
+                    <div class="flex flex-wrap gap-y-2 gap-x-4 text-xs">
+                        <div><span class="text-slate-500">Stack:</span> ${stack}</div>
+                        <div><span class="text-slate-500">Diff:</span> <span class="${section.project_ideas.difficulty_level === 'Hard' ? 'text-red-400' : 'text-blue-400'}">${section.project_ideas.difficulty_level}</span></div>
+                    </div>
+                </div>`;
+            }
+
+            // 組裝 Section Card
+            return `
+            <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-6 md:p-8 border-b border-slate-100">
+                    <div class="flex flex-wrap gap-2 mb-3">${tagsHTML}</div>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">${section.heading}</h2>
+                    <p class="text-slate-600 text-lg leading-relaxed">${section.core_concept}</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                    
+                    <div class="p-6 md:p-8 space-y-6 bg-slate-50/50">
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Key Quotes</h4>
+                            ${quotesHTML || '<p class="text-sm text-slate-400 italic">No quotes extracted.</p>'}
+                        </div>
+                        ${flashcardHTML}
+                    </div>
+
+                    <div class="p-6 md:p-8 space-y-8 bg-white">
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Actionable Insights</h4>
+                            <ul class="space-y-3">
+                                ${insightsHTML || '<p class="text-sm text-slate-400 italic">No actions extracted.</p>'}
+                            </ul>
+                        </div>
+                        ${projectHTML}
+                    </div>
+
+                </div>
+            </section>
+            `;
+        }
+    </script>
+</body>
+
+</html>
