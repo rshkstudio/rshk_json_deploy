@@ -1,0 +1,297 @@
+{
+  "source_metadata": {
+    "title": "《原子習慣》 (Atomic Habits)",
+    "main_author": "James Clear (詹姆斯·克利爾)",
+    "date_processed": "2025-05-20"
+  },
+  "high_level_summary": "本書主張「原子習慣」是自我改善的複利，細微的改變雖然短期內不明顯，但透過時間累積能產生巨大差異。詹姆斯·克利爾提出建立習慣的系統化框架——行為改變四法則（提示、渴望、回應、獎賞），並強調改變習慣的深層核心在於改變「身分認同」，重點不在於你想達成什麼成果，而在於你想成為什麼樣的人。",
+  "sections": [
+    {
+      "section_id": "fundamentals_compound_identity",
+      "heading": "核心基礎：複利效應與身分認同",
+      "tags": [
+        "#CompoundInterest",
+        "#Identity",
+        "#Systems"
+      ],
+      "core_concept": "習慣是自我改善的複利，每天進步1%，一年後將增長37倍。改變始於身分認同，而非結果。目標是關於你想達到的成果，系統則是關於讓你達到那些成果的過程。",
+      "flashcard": {
+        "question": "根據本書，行為改變的三個層次由外而內分別是什麼？",
+        "answer": "結果 (Outcomes) → 過程 (Processes) → 身分認同 (Identity)"
+      },
+      "actionable_insights": [
+        {
+          "content": "專注於建立系統而非設定目標：目標設定方向，但系統決定進步。",
+          "effort_score": 3,
+          "type": "Mindset"
+        },
+        {
+          "content": "改變身分認同：問自己「這是不是一個[我想成為的人]會做的事？」，透過每一次的小行動為新身分投票。",
+          "effort_score": 2,
+          "type": "Mindset"
+        }
+      ],
+      "project_ideas": {
+        "title": "Identity Voter App",
+        "description": "設計一個簡單的應用程式，讓使用者定義他們渴望的「身分」，並記錄每一個符合該身分的微小行動（投票），視覺化身分認同的累積。",
+        "tech_stack": [
+          "React Native",
+          "Firebase"
+        ],
+        "difficulty_level": "Medium"
+      },
+      "quotes": [
+        {
+          "text": "習慣，就是自我改善的複利。",
+          "speaker": "James Clear",
+          "context": "解釋微小改變如何隨時間產生巨大影響 [1], [2]"
+        },
+        {
+          "text": "改變習慣最有效的方法，是專注於你想成為什麼樣的人，而不是你想達成什麼成果。",
+          "speaker": "James Clear",
+          "context": "探討行為改變的層次與身分認同的重要性 [3], [4]"
+        }
+      ]
+    },
+    {
+      "section_id": "law_1_make_it_obvious",
+      "heading": "第一法則：讓提示顯而易見 (Make It Obvious)",
+      "tags": [
+        "#Cue",
+        "#HabitStacking",
+        "#Environment"
+      ],
+      "core_concept": "行為改變始於覺察。大腦依賴環境提示來啟動習慣。利用「執行意向」明確規劃，以及「習慣堆疊」將新習慣連結舊習慣，能有效啟動行為。",
+      "flashcard": {
+        "question": "什麼是「習慣堆疊」(Habit Stacking) 的公式？",
+        "answer": "做完 [目前的習慣] 後，我會執行 [新的習慣]。"
+      },
+      "actionable_insights": [
+        {
+          "content": "填寫「習慣計分卡」：列出每日習慣並標記正負，提升對無意識行為的覺察。",
+          "effort_score": 2,
+          "type": "Task"
+        },
+        {
+          "content": "使用習慣堆疊：找出每日固定的刷牙或喝咖啡時間，將新習慣接在後面。",
+          "effort_score": 1,
+          "type": "Habit"
+        },
+        {
+          "content": "設計環境：將好習慣的提示放在視線所及之處（如把水壺放在桌上），壞習慣的提示隱藏起來。",
+          "effort_score": 3,
+          "type": "Task"
+        }
+      ],
+      "project_ideas": {
+        "title": "Habit Stack Builder",
+        "description": "建立一個網頁工具，幫助使用者分析現有的日常流程，並建議插入新習慣的最佳錨點。",
+        "tech_stack": [
+          "Vue.js",
+          "Node.js"
+        ],
+        "difficulty_level": "Low"
+      },
+      "quotes": [
+        {
+          "text": "做完 [目前的習慣] 後，我會執行 [新的習慣]。",
+          "speaker": "James Clear",
+          "context": "介紹習慣堆疊的標準公式 [5], [6]"
+        },
+        {
+          "text": "環境是形塑人類行為的隱形之手。",
+          "speaker": "James Clear",
+          "context": "強調環境提示對習慣的影響 [3], [7]"
+        }
+      ]
+    },
+    {
+      "section_id": "law_2_make_it_attractive",
+      "heading": "第二法則：讓習慣有吸引力 (Make It Attractive)",
+      "tags": [
+        "#Craving",
+        "#Dopamine",
+        "#TemptationBundling"
+      ],
+      "core_concept": "渴望是習慣的動力。多巴胺的分泌主要發生在「預期」獎賞時。透過「誘惑綑綁」將想做的事與該做的事結合，並加入具備良好習慣的社群，能提升習慣吸引力。",
+      "flashcard": {
+        "question": "什麼是「誘惑綑綁」(Temptation Bundling)？",
+        "answer": "將「你需要的習慣」與「你想要的習慣」綁定在一起執行。"
+      },
+      "actionable_insights": [
+        {
+          "content": "執行誘惑綑綁：規定自己只有在處理枯燥工作（需要做）時，才能聽喜歡的Podcast（想要做）。",
+          "effort_score": 3,
+          "type": "Habit"
+        },
+        {
+          "content": "加入社群：加入一個將你渴望的行為視為「正常」的群體，利用歸屬感強化習慣。",
+          "effort_score": 4,
+          "type": "Mindset"
+        }
+      ],
+      "project_ideas": {
+        "title": "Pairing Planner",
+        "description": "一個簡單的配對工具，讓使用者輸入「高多巴胺活動」與「低意願任務」，系統隨機組合成誘惑綑綁建議。",
+        "tech_stack": [
+          "Python",
+          "Streamlit"
+        ],
+        "difficulty_level": "Low"
+      },
+      "quotes": [
+        {
+          "text": "預期獎賞的過程（而非獲得獎賞）才是採取行動的動力。",
+          "speaker": "James Clear",
+          "context": "解釋多巴胺峰值與渴望的關係 [8]"
+        },
+        {
+          "text": "我們要讓習慣顯得有吸引力，因為機會越有吸引力，越容易形成習慣。",
+          "speaker": "James Clear",
+          "context": "第二法則的核心原則 [9]"
+        }
+      ]
+    },
+    {
+      "section_id": "law_3_make_it_easy",
+      "heading": "第三法則：讓行動輕而易舉 (Make It Easy)",
+      "tags": [
+        "#Response",
+        "#2MinuteRule",
+        "#LeastEffort"
+      ],
+      "core_concept": "人類天性傾向省力。習慣養成的關鍵在於「重複」而非完美。透過「兩分鐘法則」降低門檻，並優化環境減少阻力，讓好習慣簡單到無法拒絕。",
+      "flashcard": {
+        "question": "「兩分鐘法則」的目的是什麼？",
+        "answer": "透過將新習慣縮減至兩分鐘內可完成，建立「開始」的儀式，讓行動變得極度容易。"
+      },
+      "actionable_insights": [
+        {
+          "content": "應用兩分鐘法則：將「每天閱讀」簡化為「讀一頁」，將「去健身房」簡化為「穿上運動鞋」。",
+          "effort_score": 1,
+          "type": "Habit"
+        },
+        {
+          "content": "減少阻力：為了讓健身更容易，前一晚先準備好運動服；為了戒除看電視，拔掉插頭增加阻力。",
+          "effort_score": 2,
+          "type": "Task"
+        }
+      ],
+      "project_ideas": {
+        "title": "Micro-Habit Generator",
+        "description": "輸入一個大目標，演算法自動將其拆解為一系列2分鐘內可完成的微型步驟。",
+        "tech_stack": [
+          "OpenAI API",
+          "Next.js"
+        ],
+        "difficulty_level": "Medium"
+      },
+      "quotes": [
+        {
+          "text": "精通習慣由重複開始，而非完美。",
+          "speaker": "James Clear",
+          "context": "強調行動數量比質量更重要 [10], [11]"
+        },
+        {
+          "text": "當你開始培養一個習慣時，它所用時間不應超過兩分鐘。",
+          "speaker": "James Clear",
+          "context": "解釋兩分鐘法則 [12], [13]"
+        }
+      ]
+    },
+    {
+      "section_id": "law_4_make_it_satisfying",
+      "heading": "第四法則：讓獎賞令人滿足 (Make It Satisfying)",
+      "tags": [
+        "#Reward",
+        "#HabitTracking",
+        "#InstantGratification"
+      ],
+      "core_concept": "大腦偏好立即獎賞。為了維持習慣，必須在完成當下提供滿足感。習慣追蹤器（Habit Tracker）能提供視覺化的進步證明，讓「不中斷紀錄」本身成為一種獎賞。",
+      "flashcard": {
+        "question": "為什麼「習慣追蹤法」有效？",
+        "answer": "它讓進步視覺化，提供立即的滿足感，並利用「不要中斷連續紀錄」的心理動力。"
+      },
+      "actionable_insights": [
+        {
+          "content": "使用習慣追蹤器：在日曆上打勾，目標是「不要中斷鎖鏈」。",
+          "effort_score": 2,
+          "type": "Habit"
+        },
+        {
+          "content": "建立立即獎賞機制：對於長遠才見效的習慣（如省錢），建立一個「旅遊基金」帳戶，每省下一筆錢就轉入並獲得立即滿足感。",
+          "effort_score": 2,
+          "type": "Task"
+        }
+      ],
+      "project_ideas": {
+        "title": "Chain Keeper",
+        "description": "一個極簡的習慣追蹤App，專注於顯示連續打卡天數（Streak），並在視覺上強化「鎖鏈」未斷裂的效果。",
+        "tech_stack": [
+          "Swift",
+          "CoreData"
+        ],
+        "difficulty_level": "Medium"
+      },
+      "quotes": [
+        {
+          "text": "帶來獎賞的行為會被重複、帶來懲罰的行為會被避免。",
+          "speaker": "James Clear",
+          "context": "行為強化的基本原則 [13]"
+        },
+        {
+          "text": "不要中斷連續紀錄（Don't break the chain）。",
+          "speaker": "James Clear",
+          "context": "習慣追蹤的核心心法 [6], [14]"
+        }
+      ]
+    },
+    {
+      "section_id": "advanced_tactics",
+      "heading": "進階策略：從優秀到卓越",
+      "tags": [
+        "#GoldilocksRule",
+        "#Boredom",
+        "#Genes"
+      ],
+      "core_concept": "維持動力的關鍵在於「金髮女孩原則」（執行難度適中的任務）。頂尖人士與普通人的區別，在於他們能忍受重複訓練的無聊感。",
+      "flashcard": {
+        "question": "什麼是「金髮女孩原則」(The Goldilocks Rule)？",
+        "answer": "當人類執行「難度恰好符合當前能力」的任務時，積極性最高（進入心流狀態）。"
+      },
+      "actionable_insights": [
+        {
+          "content": "愛上無聊：接受反覆練習是精通的必經之路，當動力消退時，仍要堅持執行。",
+          "effort_score": 5,
+          "type": "Mindset"
+        },
+        {
+          "content": "選對戰場：選擇符合自己性格與天賦（基因）的習慣，會讓堅持變得更容易。",
+          "effort_score": 3,
+          "type": "Mindset"
+        }
+      ],
+      "project_ideas": {
+        "title": "Flow State Timer",
+        "description": "結合番茄鐘與任務難度評估，幫助使用者調整任務難度以符合金髮女孩原則，維持專注。",
+        "tech_stack": [
+          "JavaScript",
+          "React"
+        ],
+        "difficulty_level": "Medium"
+      },
+      "quotes": [
+        {
+          "text": "成功最大的威脅不是失敗，而是無聊。",
+          "speaker": "James Clear",
+          "context": "解釋為何許多人在習慣養成後期會放棄 [15]"
+        },
+        {
+          "text": "金髮女孩規則指出，人在處理其能力可及的事務時積極性最高。",
+          "speaker": "James Clear",
+          "context": "探討如何維持動力與心流 [6]"
+        }
+      ]
+    }
+  ]
+}
