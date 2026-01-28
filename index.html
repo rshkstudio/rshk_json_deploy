@@ -3,291 +3,419 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reminiscence Studio | 朝花夕拾</title>
+    <title>Reminiscence Sync | 朝花夕拾</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        /* --- 1. CSS VARIABLES (The Palette) --- */
+        /* --- 1. DESIGN SYSTEM VARIABLES --- */
         :root {
-            /* Sumi-e & The Seal */
             --color-sumi: #1A1A1A;   /* Primary Text */
             --color-ishi: #666666;   /* Meta/Secondary */
-            --color-kami: #F5F5F5;   /* Background (Paper) */
-            --color-gin:  #E0E0E0;   /* Borders (Silver) */
-            --color-hanko: #B22222;  /* Accent (The Seal) */
+            --color-kami: #F5F5F5;   /* Background */
+            --color-gin:  #E0E0E0;   /* Borders */
+            --color-hanko: #B22222;  /* Accent (Action) */
             
-            /* Typography */
-            --font-serif: 'Noto Serif TC', 'Songti TC', serif;
-            --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+            --font-serif: 'Noto Serif TC', serif;
+            --font-mono: 'JetBrains Mono', monospace;
             
-            /* Spacing (Ma) */
-            --space-unit: 1rem;
-            --space-lg: 4rem;
+            --space-unit: 1.5rem;
         }
 
-        /* --- 2. GLOBAL RESET & BASE --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            /* Rule: NO Rounding */
-            border-radius: 0px !important; 
-        }
-
+        /* --- 2. BASE RESETS (The Anti-Pattern Enforcement) --- */
+        * { box-sizing: border-box; outline: none; }
+        
         body {
+            margin: 0; padding: 0;
             background-color: var(--color-kami);
             color: var(--color-sumi);
-            font-family: var(--font-mono); /* Default to Logic/Code */
+            font-family: var(--font-mono); /* Default to Logic */
             line-height: 1.6;
-            overflow-x: hidden;
-            position: relative;
+            min-height: 100vh;
         }
 
-        /* Texture (Noise Overlay) */
+        /* Noise Texture */
         body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.04;
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9999; opacity: 0.03;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        /* --- 3. TYPOGRAPHY RULES --- */
-        h1, h2, h3, h4 {
-            font-family: var(--font-serif);
-            font-weight: 700;
+        /* Typography Override */
+        h1, h2, h3 { font-family: var(--font-serif); font-weight: 700; letter-spacing: 0.05em; margin: 0; }
+        input, textarea, button { font-family: var(--font-mono); border-radius: 0 !important; }
+
+        /* --- 3. LAYOUT COMPONENTS --- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            border-left: 1px dashed var(--color-gin);
+            border-right: 1px dashed var(--color-gin);
+            min-height: 100vh;
+            background: var(--color-kami);
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 4rem;
+            border-bottom: 1px solid var(--color-sumi);
+            padding-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .brand-title { font-size: 2.5rem; line-height: 1.2; }
+        .brand-meta { color: var(--color-ishi); font-size: 0.8rem; margin-top: 0.5rem; display: block; }
+        
+        /* Interactive Elements */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            background: transparent;
+            color: var(--color-sumi);
+            border: 1px solid var(--color-sumi);
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
-        p, span, small, a, li {
-            font-family: var(--font-mono);
-        }
+        .btn:hover { background: var(--color-sumi); color: var(--color-kami); }
+        
+        .btn-primary { border-color: var(--color-hanko); color: var(--color-hanko); font-weight: bold; }
+        .btn-primary:hover { background: var(--color-hanko); color: white; }
 
-        a {
-            color: var(--color-sumi);
-            text-decoration: none;
-            border-bottom: 1px solid var(--color-sumi);
-            transition: background-color 0.2s ease;
-        }
+        .btn-small { padding: 0.4rem 0.8rem; font-size: 0.75rem; }
 
-        a:hover {
-            background-color: var(--color-sumi);
-            color: var(--color-kami);
-        }
-
-        /* --- 4. COMPONENT LIBRARY --- */
-
-        /* Navigation (The Control Panel) */
-        nav {
-            position: sticky;
-            top: 0;
-            background: var(--color-kami);
-            border-bottom: 1px solid var(--color-gin);
-            padding: var(--space-unit);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-        }
-
-        .logo {
-            font-family: var(--font-serif);
-            font-weight: bold;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo::before {
-            content: '';
-            display: block;
-            width: 12px;
-            height: 12px;
-            background: var(--color-hanko); /* The Seal */
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            font-size: 0.9rem;
-        }
-
-        /* Hero Section (The Bridge) */
-        .hero {
-            padding: 10vh var(--space-unit);
-            max-width: 1200px;
-            margin: 0 auto;
-            border-left: 1px dashed var(--color-gin); /* Viewfinder Line */
-        }
-
-        .hero-meta {
-            color: var(--color-ishi);
-            font-size: 0.8rem;
-            margin-bottom: var(--space-unit);
-            display: block;
-        }
-
-        .hero-title {
-            font-size: 3.5rem;
-            line-height: 1.2;
-            margin-bottom: var(--space-lg);
-            max-width: 800px;
-        }
-
-        /* Blinking Cursor Animation */
-        .cursor::after {
-            content: '_';
-            animation: blink 1s step-end infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        /* Grid System (The Contact Sheet) */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            border-top: 1px solid var(--color-gin);
-        }
-
-        .card {
-            border-right: 1px solid var(--color-gin);
-            border-bottom: 1px solid var(--color-gin);
-            padding: var(--space-unit);
-            position: relative;
-            background: var(--color-kami);
-            transition: all 0.3s ease;
-        }
-
-        .card-image {
+        /* Inputs */
+        .input-group { margin-bottom: 1.5rem; }
+        label { display: block; font-size: 0.75rem; color: var(--color-ishi); margin-bottom: 0.5rem; text-transform: uppercase; }
+        
+        input[type="text"], input[type="password"], textarea {
             width: 100%;
-            aspect-ratio: 3 / 2; /* 35mm ratio */
-            background-color: #ddd;
-            margin-bottom: var(--space-unit);
-            filter: grayscale(100%); /* Rule: Grayscale default */
-            transition: filter 0.4s ease;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* Hover Interaction */
-        .card:hover .card-image {
-            filter: grayscale(0%); /* Reveal color */
-        }
-
-        .card-title {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .card-meta {
-            color: var(--color-ishi);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-        }
-
-        /* Buttons (Rectangular) */
-        .btn {
-            display: inline-block;
-            border: 1px solid var(--color-sumi);
-            padding: 1rem 2rem;
-            font-family: var(--font-mono);
+            background: #fff;
+            border: 1px solid var(--color-gin);
+            padding: 1rem;
             font-size: 0.9rem;
-            background: transparent;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border-bottom: 1px solid var(--color-sumi); /* Reset link style override */
-        }
-
-        .btn:hover {
-            background: var(--color-sumi);
-            color: var(--color-kami);
-        }
-
-        .btn-primary {
-            border-color: var(--color-hanko);
-            color: var(--color-hanko);
+            color: var(--color-sumi);
+            transition: border-color 0.2s;
         }
         
-        .btn-primary:hover {
-            background: var(--color-hanko);
-            color: white;
-        }
+        input:focus, textarea:focus { border-color: var(--color-sumi); }
+        textarea { resize: vertical; min-height: 200px; font-size: 0.85rem; line-height: 1.6; }
 
-        /* Footer (The Colophon) */
-        footer {
-            padding: var(--space-lg) var(--space-unit);
-            border-top: 1px dashed var(--color-gin);
-            font-size: 0.8rem;
+        /* Config Panel (Hidden) */
+        #configPanel {
+            display: none;
+            background: #fff;
+            border: 1px solid var(--color-sumi);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        #configPanel.active { display: block; animation: fadeIn 0.3s ease; }
+        
+        /* Preview Section */
+        .card {
+            border: 1px solid var(--color-gin);
+            background: #fff;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .card-header { margin-bottom: 1.5rem; border-bottom: 1px dashed var(--color-gin); padding-bottom: 1rem; }
+        .tag { 
+            display: inline-block; 
+            border: 1px solid var(--color-gin); 
+            padding: 2px 8px; 
+            font-size: 0.7rem; 
+            margin-right: 5px; 
             color: var(--color-ishi);
-            text-align: left;
         }
 
+        /* Utility */
+        .hidden { display: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* SweetAlert Override to match theme */
+        div:where(.swal2-container) div:where(.swal2-popup) {
+            border-radius: 0 !important;
+            border: 1px solid var(--color-sumi);
+            font-family: var(--font-mono);
+        }
+        div:where(.swal2-icon) { border-color: var(--color-sumi) !important; color: var(--color-sumi) !important; }
+        div:where(.swal2-styled.swal2-confirm) {
+            border-radius: 0 !important;
+            background-color: var(--color-sumi) !important;
+        }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">朝花夕拾</div>
-        <div class="nav-links">
-            <a href="#">[01] Works</a>
-            <a href="#">[02] Studio</a>
-            <a href="#">[03] Contact</a>
+<div class="container">
+    
+    <header>
+        <div>
+            <h1 class="brand-title">Knowledge<br>Sync_</h1>
+            <span class="brand-meta">> System: GitHub Uploader Interface</span>
         </div>
-    </nav>
+        <div style="display: flex; gap: 10px;">
+            <button onclick="toggleConfig()" class="btn btn-small">
+                [::] Config
+            </button>
+            <button onclick="clearAll()" class="btn btn-small">
+                // Reset
+            </button>
+        </div>
+    </header>
 
-    <section class="hero">
-        <span class="hero-meta">> System Status: Recording Reality</span>
-        <h1 class="hero-title">
-            Capturing light.<br>
-            Structuring logic.<br>
-            <span class="cursor">Preserving the moment</span>
-        </h1>
-        
-        <p style="max-width: 600px; margin-bottom: 2rem; color: var(--color-ishi);">
-            // We combine the art of photography with the precision of code.
-            We don't just take photos; we document reality. We don't just write code; we architect solutions.
-        </p>
-
-        <a href="#" class="btn btn-primary">Initialize Project</a>
-    </section>
-
-    <div class="grid-container">
-        <article class="card">
-            <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Camera" class="card-image">
-            <div class="card-meta">ISO 400 | Tokyo, JP</div>
-            <h2 class="card-title">Urban Silence</h2>
-            <p class="card-meta">Web Development / Photography</p>
-        </article>
-
-        <article class="card">
-            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Code" class="card-image">
-            <div class="card-meta">Commit: 8f3a21 | 2023</div>
-            <h2 class="card-title">Backend Architecture</h2>
-            <p class="card-meta">System Design</p>
-        </article>
-
-        <article class="card">
-            <img src="https://images.unsplash.com/photo-1493863641943-9b68992a8d07?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Architecture" class="card-image">
-            <div class="card-meta">f/8.0 1/250s</div>
-            <h2 class="card-title">Concrete & Light</h2>
-            <p class="card-meta">Visual Identity</p>
-        </article>
+    <div id="configPanel">
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.2rem;">> System Configuration</h3>
+        <div class="input-group">
+            <label>GitHub Personal Access Token (PAT)</label>
+            <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxx">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="input-group">
+                <label>Repository (owner/repo)</label>
+                <input type="text" id="ghRepo" placeholder="username/repo">
+            </div>
+            <div class="input-group">
+                <label>File Path (Folder)</label>
+                <input type="text" id="ghPath" value="content/notes/">
+            </div>
+        </div>
+        <div style="text-align: right;">
+            <button onclick="saveConfig()" class="btn">Save Settings</button>
+        </div>
     </div>
 
-    <footer>
-        <p>/* © 2026 Reminiscence Studio. All rights reserved. */</p>
-        <br>
-        <p>Memory_Allocated: 1024MB; Status: Stable;</p>
+    <main>
+        <div class="input-group">
+            <label>Input Stream (Paste NotebookLM JSON)</label>
+            <textarea id="jsonInput" placeholder='{ "source_metadata": { ... } }'></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
+            <span id="statusText" style="color: var(--color-ishi); font-size: 0.8rem;">Ready.</span>
+            
+            <div style="display: flex; gap: 15px;">
+                <button onclick="previewData()" class="btn">
+                    <i class="fa-regular fa-eye"></i> Preview
+                </button>
+                <button onclick="uploadToGitHub()" id="uploadBtn" class="btn btn-primary">
+                    <i class="fa-brands fa-github"></i> Push to Repo
+                </button>
+            </div>
+        </div>
+
+        <div id="outputContainer" class="hidden">
+            <h3 style="margin-bottom: 1rem; border-bottom: 1px solid var(--color-sumi); padding-bottom: 0.5rem;">> Data Preview</h3>
+            <div id="previewContent"></div>
+        </div>
+    </main>
+
+    <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px dashed var(--color-gin); color: var(--color-ishi); font-size: 0.75rem;">
+        /* © 2026 Reminiscence Studio. All rights reserved. */<br>
+        Memory_Allocated: LocalStorage; Status: Stable;
     </footer>
+
+</div>
+
+<script>
+    // --- 1. CONFIGURATION LOGIC ---
+    function toggleConfig() {
+        document.getElementById('configPanel').classList.toggle('active');
+    }
+
+    // Load saved config on startup
+    window.onload = function() {
+        document.getElementById('ghToken').value = localStorage.getItem('gh_token') || '';
+        document.getElementById('ghRepo').value = localStorage.getItem('gh_repo') || '';
+        document.getElementById('ghPath').value = localStorage.getItem('gh_path') || 'content/notes/';
+    }
+
+    function saveConfig() {
+        const token = document.getElementById('ghToken').value.trim();
+        const repo = document.getElementById('ghRepo').value.trim();
+        const path = document.getElementById('ghPath').value.trim();
+
+        if(!token || !repo) {
+            Swal.fire({ title: 'Error', text: 'Token and Repo are required.', icon: 'error' });
+            return;
+        }
+
+        localStorage.setItem('gh_token', token);
+        localStorage.setItem('gh_repo', repo);
+        localStorage.setItem('gh_path', path);
+        
+        Swal.fire({
+            title: 'Saved',
+            text: 'Configuration updated successfully.',
+            icon: 'success',
+            confirmButtonText: 'ACKNOWLEDGE'
+        });
+        toggleConfig();
+    }
+
+    // --- 2. UPLOAD LOGIC ---
+    async function uploadToGitHub() {
+        const rawJson = document.getElementById('jsonInput').value.trim();
+        const btn = document.getElementById('uploadBtn');
+        const status = document.getElementById('statusText');
+
+        if (!rawJson) {
+            Swal.fire({ title: 'Empty Input', text: 'Please paste JSON data first.', icon: 'warning' });
+            return;
+        }
+
+        // Get Config
+        const token = localStorage.getItem('gh_token');
+        const repo = localStorage.getItem('gh_repo');
+        let pathFolder = localStorage.getItem('gh_path') || 'content/';
+
+        if (!token || !repo) {
+            toggleConfig();
+            Swal.fire({ title: 'Setup Required', text: 'Please configure GitHub settings.', icon: 'info' });
+            return;
+        }
+
+        // Parse JSON
+        let data;
+        try {
+            const cleanJson = rawJson.replace(/^```json/, '').replace(/```$/, '');
+            data = JSON.parse(cleanJson);
+        } catch (e) {
+            Swal.fire({ title: 'Syntax Error', text: 'Invalid JSON format.', icon: 'error' });
+            return;
+        }
+
+        // Prepare File
+        const dateStr = new Date().toISOString().split('T')[0];
+        const safeTitle = (data.source_metadata?.title || 'untitled')
+            .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        const fileName = `${dateStr}-${safeTitle}.json`;
+        const fullPath = `${pathFolder.replace(/\/$/, '')}/${fileName}`;
+        const apiUrl = `https://api.github.com/repos/${repo}/contents/${fullPath}`;
+        
+        // Encode content
+        const contentEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+
+        // UI Loading State
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '[ Uploading... ]';
+        btn.disabled = true;
+        status.innerText = 'Transmitting data to GitHub...';
+
+        try {
+            // Check existing file
+            const checkRes = await fetch(apiUrl, { headers: { 'Authorization': `token ${token}` } });
+            let sha = null;
+            if (checkRes.ok) {
+                const fileData = await checkRes.json();
+                sha = fileData.sha;
+            }
+
+            // PUT Request
+            const putRes = await fetch(apiUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: `Sync: ${data.source_metadata?.title}`,
+                    content: contentEncoded,
+                    sha: sha
+                })
+            });
+
+            if (putRes.ok) {
+                const result = await putRes.json();
+                status.innerText = 'Upload Complete.';
+                Swal.fire({
+                    title: 'Sync Complete',
+                    html: `Data pushed to <a href="${result.content.html_url}" target="_blank" style="text-decoration:underline; font-weight:bold;">${fullPath}</a>`,
+                    icon: 'success',
+                    confirmButtonText: 'CLOSE'
+                });
+            } else {
+                const err = await putRes.json();
+                throw new Error(err.message);
+            }
+
+        } catch (error) {
+            console.error(error);
+            Swal.fire({ title: 'Upload Failed', text: error.message, icon: 'error' });
+            status.innerText = 'Error occurred.';
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+
+    // --- 3. PREVIEW LOGIC ---
+    function previewData() {
+        const raw = document.getElementById('jsonInput').value.trim();
+        if(!raw) return;
+
+        try {
+            const cleanJson = raw.replace(/^```json/, '').replace(/```$/, '');
+            const data = JSON.parse(cleanJson);
+            renderPreview(data);
+            document.getElementById('outputContainer').classList.remove('hidden');
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
+    function renderPreview(data) {
+        const container = document.getElementById('previewContent');
+        const sections = data.sections || [];
+        const meta = data.source_metadata || {};
+        
+        // Generate HTML string strictly following Design MD
+        let html = `
+            <div style="margin-bottom: 2rem; color: var(--color-ishi); font-size: 0.8rem;">
+                METADATA: ${meta.title} | ${meta.main_author}
+            </div>
+        `;
+
+        html += sections.map(sec => `
+            <div class="card">
+                <div class="card-header">
+                    <h3 style="font-size: 1.5rem;">${sec.heading}</h3>
+                    <div style="margin-top: 0.5rem;">
+                        ${(sec.tags||[]).map(t => `<span class="tag">#${t}</span>`).join('')}
+                    </div>
+                </div>
+                <p style="margin-bottom: 1.5rem; font-family: var(--font-serif); font-size: 1.1rem;">
+                    ${sec.core_concept}
+                </p>
+                <div style="background: var(--color-kami); padding: 1rem; border: 1px dashed var(--color-gin);">
+                    <div style="font-size: 0.75rem; color: var(--color-ishi); margin-bottom: 0.5rem;">ACTIONABLE_INSIGHTS</div>
+                    <ul style="list-style: square; padding-left: 1.2rem; margin: 0;">
+                        ${(sec.actionable_insights||[]).map(i => `<li>${i.content} <span style="font-size:0.7em">[Effort:${i.effort_score}]</span></li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `).join('');
+        
+        container.innerHTML = html;
+    }
+
+    function clearAll() {
+        document.getElementById('jsonInput').value = '';
+        document.getElementById('outputContainer').classList.add('hidden');
+        document.getElementById('statusText').innerText = 'Ready.';
+    }
+</script>
 
 </body>
 </html>
