@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reminiscence Studio | 朝花夕拾</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 1. CSS VARIABLES (The Palette) --- */
+        :root {
+            /* Sumi-e & The Seal */
+            --color-sumi: #1A1A1A;   /* Primary Text */
+            --color-ishi: #666666;   /* Meta/Secondary */
+            --color-kami: #F5F5F5;   /* Background (Paper) */
+            --color-gin:  #E0E0E0;   /* Borders (Silver) */
+            --color-hanko: #B22222;  /* Accent (The Seal) */
+            
+            /* Typography */
+            --font-serif: 'Noto Serif TC', 'Songti TC', serif;
+            --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+            
+            /* Spacing (Ma) */
+            --space-unit: 1rem;
+            --space-lg: 4rem;
+        }
+
+        /* --- 2. GLOBAL RESET & BASE --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            /* Rule: NO Rounding */
+            border-radius: 0px !important; 
+        }
+
+        body {
+            background-color: var(--color-kami);
+            color: var(--color-sumi);
+            font-family: var(--font-mono); /* Default to Logic/Code */
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Texture (Noise Overlay) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* --- 3. TYPOGRAPHY RULES --- */
+        h1, h2, h3, h4 {
+            font-family: var(--font-serif);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        p, span, small, a, li {
+            font-family: var(--font-mono);
+        }
+
+        a {
+            color: var(--color-sumi);
+            text-decoration: none;
+            border-bottom: 1px solid var(--color-sumi);
+            transition: background-color 0.2s ease;
+        }
+
+        a:hover {
+            background-color: var(--color-sumi);
+            color: var(--color-kami);
+        }
+
+        /* --- 4. COMPONENT LIBRARY --- */
+
+        /* Navigation (The Control Panel) */
+        nav {
+            position: sticky;
+            top: 0;
+            background: var(--color-kami);
+            border-bottom: 1px solid var(--color-gin);
+            padding: var(--space-unit);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo::before {
+            content: '';
+            display: block;
+            width: 12px;
+            height: 12px;
+            background: var(--color-hanko); /* The Seal */
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+        }
+
+        /* Hero Section (The Bridge) */
+        .hero {
+            padding: 10vh var(--space-unit);
+            max-width: 1200px;
+            margin: 0 auto;
+            border-left: 1px dashed var(--color-gin); /* Viewfinder Line */
+        }
+
+        .hero-meta {
+            color: var(--color-ishi);
+            font-size: 0.8rem;
+            margin-bottom: var(--space-unit);
+            display: block;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: var(--space-lg);
+            max-width: 800px;
+        }
+
+        /* Blinking Cursor Animation */
+        .cursor::after {
+            content: '_';
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Grid System (The Contact Sheet) */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            border-top: 1px solid var(--color-gin);
+        }
+
+        .card {
+            border-right: 1px solid var(--color-gin);
+            border-bottom: 1px solid var(--color-gin);
+            padding: var(--space-unit);
+            position: relative;
+            background: var(--color-kami);
+            transition: all 0.3s ease;
+        }
+
+        .card-image {
+            width: 100%;
+            aspect-ratio: 3 / 2; /* 35mm ratio */
+            background-color: #ddd;
+            margin-bottom: var(--space-unit);
+            filter: grayscale(100%); /* Rule: Grayscale default */
+            transition: filter 0.4s ease;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Hover Interaction */
+        .card:hover .card-image {
+            filter: grayscale(0%); /* Reveal color */
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-meta {
+            color: var(--color-ishi);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        /* Buttons (Rectangular) */
+        .btn {
+            display: inline-block;
+            border: 1px solid var(--color-sumi);
+            padding: 1rem 2rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid var(--color-sumi); /* Reset link style override */
+        }
+
+        .btn:hover {
+            background: var(--color-sumi);
+            color: var(--color-kami);
+        }
+
+        .btn-primary {
+            border-color: var(--color-hanko);
+            color: var(--color-hanko);
+        }
+        
+        .btn-primary:hover {
+            background: var(--color-hanko);
+            color: white;
+        }
+
+        /* Footer (The Colophon) */
+        footer {
+            padding: var(--space-lg) var(--space-unit);
+            border-top: 1px dashed var(--color-gin);
+            font-size: 0.8rem;
+            color: var(--color-ishi);
+            text-align: left;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">朝花夕拾</div>
+        <div class="nav-links">
+            <a href="#">[01] Works</a>
+            <a href="#">[02] Studio</a>
+            <a href="#">[03] Contact</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <span class="hero-meta">> System Status: Recording Reality</span>
+        <h1 class="hero-title">
+            Capturing light.<br>
+            Structuring logic.<br>
+            <span class="cursor">Preserving the moment</span>
+        </h1>
+        
+        <p style="max-width: 600px; margin-bottom: 2rem; color: var(--color-ishi);">
+            // We combine the art of photography with the precision of code.
+            We don't just take photos; we document reality. We don't just write code; we architect solutions.
+        </p>
+
+        <a href="#" class="btn btn-primary">Initialize Project</a>
+    </section>
+
+    <div class="grid-container">
+        <article class="card">
+            <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Camera" class="card-image">
+            <div class="card-meta">ISO 400 | Tokyo, JP</div>
+            <h2 class="card-title">Urban Silence</h2>
+            <p class="card-meta">Web Development / Photography</p>
+        </article>
+
+        <article class="card">
+            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Code" class="card-image">
+            <div class="card-meta">Commit: 8f3a21 | 2023</div>
+            <h2 class="card-title">Backend Architecture</h2>
+            <p class="card-meta">System Design</p>
+        </article>
+
+        <article class="card">
+            <img src="https://images.unsplash.com/photo-1493863641943-9b68992a8d07?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Architecture" class="card-image">
+            <div class="card-meta">f/8.0 1/250s</div>
+            <h2 class="card-title">Concrete & Light</h2>
+            <p class="card-meta">Visual Identity</p>
+        </article>
+    </div>
+
+    <footer>
+        <p>/* © 2026 Reminiscence Studio. All rights reserved. */</p>
+        <br>
+        <p>Memory_Allocated: 1024MB; Status: Stable;</p>
+    </footer>
+
+</body>
+</html>
